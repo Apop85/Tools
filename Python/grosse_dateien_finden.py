@@ -68,13 +68,16 @@ def crawl_harddrive():
         if '$' and '~~amd64~~' in folder:
             continue
         for file_name in file_list:
-            if 'Edge' in file_name or '__' in file_name or file_name.startswith('$'):
-                continue
-            file_size=(os.path.getsize(folder+'\\'+file_name))
-            folder_name=folder
-            if file_size > 10**6:
-                file_size_list.setdefault(file_size, folder_name+'\\'+file_name)
-            folder_size+=file_size
+            try:
+                if 'Edge' in file_name or '__' in file_name or file_name.startswith('$'):
+                    continue
+                file_size=(os.path.getsize(folder+'\\'+file_name))
+                folder_name=folder
+                if file_size > 10**6:
+                    file_size_list.setdefault(file_size, folder_name+'\\'+file_name)
+                folder_size+=file_size
+            except:
+                pass
         folder_size_list.setdefault(folder_size, folder_name)
 
 def top_X_files():
