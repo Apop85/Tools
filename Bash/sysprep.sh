@@ -1,4 +1,21 @@
 #!/bin/bash
+# -*- coding:utf-8 -*-
+
+####
+# File: sysprep.sh
+# Project: Bash
+#-----
+# Created Date: Sunday 12.07.2020, 13:35
+# Author: Apop85
+#-----
+# Last Modified: Sunday 12.07.2020, 22:13
+#-----
+# Copyright (c) 2020 Apop85
+# This software is published under the MIT license.
+# Check http://www.opensource.org/licenses/MIT for further informations
+#-----
+# Description: Prepares Ubuntu 20.04 for a cloned virtual machine
+####
 
 #Prüfe ob "dialog" installiert ist.
 check=$(dpkg -s dialog 2>&1 | sed -n 2p | awk '{print $3}')
