@@ -97,7 +97,6 @@ def output_data(dictionary, depth=0):
             depth -= 1
         else:
             print("\t"*depth + str(dictionary[key]).lower())
-    input()
 
 path = choose_file()
 content_list = get_file_content(path)
