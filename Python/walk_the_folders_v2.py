@@ -15,6 +15,7 @@
 # Check http://www.opensource.org/licenses/MIT for further informations
 #-----
 # Description: This script analyzes every Folder and Subfolder and lists Folder, Subfolder and Files as well as filesize for each extension.
+# Difference to v1: It analyzes folders on the fly. No need for preprocessing
 ####
 import os, re
 
