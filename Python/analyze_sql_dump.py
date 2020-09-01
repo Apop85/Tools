@@ -3,14 +3,18 @@ import os, re
 def analyze_data(file_content):
     pos_tuples = []
     startpoint = None
+    # Find table definitions
     for i in range(0,len(file_content)):
+        # Start of table
         if "CREATE TABLE" in file_content[i] and startpoint == None:
             startpoint = i
+        # End of table
         elif "ENGINE" in file_content[i] and startpoint != None:
             pos_tuples.append((startpoint, i))
             startpoint = None
 
     table_definitions = {}
+    # Regex patterns
     table_name_pattern = re.compile(r'`(.*)`')
     datatype_pattern = re.compile(r'` ([a-zA-Z0-9)(]+)')
     defaut_pattern = re.compile(r'DEFAULT (.*),?')
@@ -18,10 +22,13 @@ def analyze_data(file_content):
     primary_key_pattern = re.compile(r'.*PRIMARY KEY \(`(.*)`\)')
 
     for position in pos_tuples:
+        # Iterate trough table definition
         for i in range(position[0], position[1]+1):
+            # Table name definition
             if i == position[0]:
                 table_name = table_name_pattern.findall(file_content[i])[0]
                 table_definitions.setdefault(table_name, {})
+            # Read table attributes
             elif not "ENGINE" in file_content[i].upper() and not "PRIMARY" in file_content[i].upper() and not "FOREIGN" in file_content[i].upper(): 
                 attr_name = table_name_pattern.findall(file_content[i])[0]
                 table_definitions[table_name].setdefault(attr_name, {})
@@ -49,16 +56,17 @@ def analyze_data(file_content):
                     table_definitions[table_name][attr_name].setdefault("DEFAULT VALUE", default_value)
                     # print('"' + default_value + '"')
 
-
+            # Get primary key
             elif "PRIMARY" in file_content[i].upper():
                 primary_key = primary_key_pattern.findall(file_content[i].upper())[0]
-                table_definitions[table_name][attr_name].setdefault("PRIMARY KEY", primary_key)
+                table_definitions[table_name].setdefault("PRIMARY KEY", primary_key)
+            # Get foreign key
             elif "FOREIGN" in file_content[i].upper():
                 foreign_key_values = foreign_pattern.findall(file_content[i].upper())
                 keyname = foreign_key_values[0]
                 target_table = foreign_key_values[1]
                 target_attribute = foreign_key_values[2]
-                table_definitions[table_name][attr_name].setdefault("FOREIGN KEY", {"KEYNAME" : keyname, "TARGET_TABLE" : target_table, "TARGET_ATTR" : target_attribute})
+                table_definitions[table_name].setdefault("FOREIGN KEY", {"KEYNAME" : keyname, "TARGET_TABLE" : target_table, "TARGET_ATTR" : target_attribute})
 
     return table_definitions
 
@@ -80,13 +88,16 @@ def get_file_content(path):
     return file_content
 
 
-def output_data(dictionary):
-    # print(type(dictionary))
+def output_data(dictionary, depth=0):
     for key in dictionary.keys():
+        print("\t"*depth + key.upper())
         if type(dictionary[key]) == dict:
-            output_data(dictionary[key])
+            depth += 1
+            output_data(dictionary[key], depth)
+            depth -= 1
         else:
-            print(dictionary[key])
+            print("\t"*depth + str(dictionary[key]).lower())
+    input()
 
 path = choose_file()
 content_list = get_file_content(path)
