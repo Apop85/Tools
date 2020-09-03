@@ -54,7 +54,6 @@ def analyze_data(file_content):
                         default_value = "NULL"
 
                     table_definitions[table_name][attr_name].setdefault("DEFAULT VALUE", default_value)
-                    # print('"' + default_value + '"')
 
             # Get primary key
             elif "PRIMARY" in file_content[i].upper():
