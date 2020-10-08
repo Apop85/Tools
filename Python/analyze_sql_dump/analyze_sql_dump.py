@@ -53,47 +53,55 @@ def analyze_data(file_content):
                 table_name = table_name_pattern.findall(file_content[i])[0]
                 table_definitions.setdefault(table_name, {})
             # Read table attributes
-            elif not "ENGINE" in file_content[i].upper() and not "PRIMARY" in file_content[i].upper() and not "FOREIGN" in file_content[i].upper(): 
-                attr_name = table_name_pattern.findall(file_content[i])[0]
-                table_definitions[table_name].setdefault(attr_name, {})
+            elif not "ENGINE" in file_content[i].upper() and not "PRIMARY" in file_content[i].upper() and not "FOREIGN" in file_content[i].upper() and not "/*" in file_content[i]: 
+                try:
+                    attr_name = table_name_pattern.findall(file_content[i])[0]
+                    table_definitions[table_name].setdefault(attr_name, {})
 
-                datatype = datatype_pattern.findall(file_content[i])[0]
-                table_definitions[table_name][attr_name].setdefault("DATATYPE", datatype)
+                    datatype = datatype_pattern.findall(file_content[i])[0]
+                    table_definitions[table_name][attr_name].setdefault("DATATYPE", datatype)
 
-                if "NOT NULL" in file_content[i].upper():
-                    table_definitions[table_name][attr_name].setdefault("NULLABLE", False)
-                else:
-                    table_definitions[table_name][attr_name].setdefault("NULLABLE", True)
+                    if "NOT NULL" in file_content[i].upper():
+                        table_definitions[table_name][attr_name].setdefault("NULLABLE", False)
+                    else:
+                        table_definitions[table_name][attr_name].setdefault("NULLABLE", True)
 
-                if "AUTO_INCREMENT" in file_content[i].upper():
-                    table_definitions[table_name][attr_name].setdefault("AUTO_INCREMENT", True)
+                    if "AUTO_INCREMENT" in file_content[i].upper():
+                        table_definitions[table_name][attr_name].setdefault("AUTO_INCREMENT", True)
 
-                if "DEFAULT" in file_content[i].upper():
-                    default_value = defaut_pattern.findall(file_content[i].upper())[0]
-                    default_value = default_value.strip(" ")
-                    default_value = default_value.strip(",")
-                    default_value = default_value.strip("'")
+                    if "DEFAULT " in file_content[i].upper():
+                        default_value = defaut_pattern.findall(file_content[i].upper())[0]
+                        default_value = default_value.strip(" ")
+                        default_value = default_value.strip(",")
+                        default_value = default_value.strip("'")
 
-                    if default_value == "":
-                        default_value = "NULL"
+                        if default_value == "":
+                            default_value = "NULL"
 
-                    table_definitions[table_name][attr_name].setdefault("DEFAULT_VALUE", default_value)
-                else:
-                    table_definitions[table_name][attr_name].setdefault("DEFAULT_VALUE", None)
-
+                        table_definitions[table_name][attr_name].setdefault("DEFAULT_VALUE", default_value)
+                    else:
+                        table_definitions[table_name][attr_name].setdefault("DEFAULT_VALUE", None)
+                except:
+                    pass
 
             # Get primary_key
             elif "PRIMARY" in file_content[i].upper():
-                primary_key = primary_key_pattern.findall(file_content[i].upper())[0]
-                table_definitions[table_name].setdefault("PRIMARY_KEY", primary_key)
+                try:
+                    primary_key = primary_key_pattern.findall(file_content[i].upper())[0]
+                    table_definitions[table_name].setdefault("PRIMARY_KEY", primary_key)
+                except:
+                    pass
             # Get foreign_key
             elif "FOREIGN" in file_content[i].upper():
-                foreign_key_values = foreign_pattern.findall(file_content[i].upper())
-                keyname = foreign_key_values[0][0].strip("`")
-                target_table = foreign_key_values[0][1]
-                target_attribute = foreign_key_values[0][2].strip("`")
-                table_definitions[table_name].setdefault("FOREIGN_KEY", {})
-                table_definitions[table_name]["FOREIGN_KEY"].setdefault(keyname.lower(), { "TARGET_TABLE" : target_table, "TARGET_ATTR" : target_attribute})
+                try:
+                    foreign_key_values = foreign_pattern.findall(file_content[i].upper())
+                    keyname = foreign_key_values[0][0].strip("`")
+                    target_table = foreign_key_values[0][1]
+                    target_attribute = foreign_key_values[0][2].strip("`")
+                    table_definitions[table_name].setdefault("FOREIGN_KEY", {})
+                    table_definitions[table_name]["FOREIGN_KEY"].setdefault(keyname.lower(), { "TARGET_TABLE" : target_table, "TARGET_ATTR" : target_attribute})
+                except:
+                    pass
                 
 
     return table_definitions
