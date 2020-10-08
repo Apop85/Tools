@@ -234,7 +234,7 @@ if [ $? -eq 0 ]; then
 						q3=$(echo $gateway | sed -E "s/\./ /g" | awk '{print $3}' )
 						q4=$(echo $gateway | sed -E "s/\./ /g" | awk '{print $4}' )
 						# Prüfe ob Oktette grösser 0 und kleiner 255 sind und die IP dem vorgegebenen Musrer entspricht
-						if [[ $gateway =~ [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3} ]] && (( $q1 >= 1 )) && (( $q1 <= 255 )) && (( $q2 >= 1 )) && (( $q2 <= 255 )) && (( $q3 >= 1 )) && (( $q3 <= 255 )) && (( $q4 >= 1 )) && (( $q4 <= 255 )); then
+						if [[ $gateway =~ [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3} ]] && (( $q1 >= 1 )) && (( $q1 <= 255 )) && (( $q2 >= 0 )) && (( $q2 <= 255 )) && (( $q3 >= 0 )) && (( $q3 <= 255 )) && (( $q4 >= 1 )) && (( $q4 <= 255 )); then
 							nachricht="Ist die Gateway-IP-Adresse: \"$gateway\" korrekt?"
 								dialog --title "Bestätigung" --yesno "$nachricht" 10 30
 
@@ -265,7 +265,7 @@ if [ $? -eq 0 ]; then
 						q3=$(echo $dns | sed -E "s/\./ /g" | awk '{print $3}' )
 						q4=$(echo $dns | sed -E "s/\./ /g" | awk '{print $4}' )
 						# Prüfe ob Oktette grösser 0 und kleiner 255 sind und die IP dem vorgegebenen Musrer entspricht
-						if [[ $dns =~ [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3} ]] && (( $q1 >= 1 )) && (( $q1 <= 255 )) && (( $q2 >= 1 )) && (( $q2 <= 255 )) && (( $q3 >= 1 )) && (( $q3 <= 255 )) && (( $q4 >= 1 )) && (( $q4 <= 255 )); then
+						if [[ $dns =~ [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3} ]] && (( $q1 >= 1 )) && (( $q1 <= 255 )) && (( $q2 >= 0 )) && (( $q2 <= 255 )) && (( $q3 >= 0 )) && (( $q3 <= 255 )) && (( $q4 >= 1 )) && (( $q4 <= 255 )); then
 							nachricht="Ist die DNS-IP-Adresse: \"$dns\" korrekt?"
 								dialog --title "Bestätigung" --yesno "$nachricht" 10 30
 
@@ -325,7 +325,7 @@ if [ $? -eq 0 ]; then
 		elif [ $wahl -eq 5 ]; then
 			# Benutzer löschen
 			echo -e "${infocolor}[Info]${resetcolor} Plane Aufgabe für die Löschung von $delusername"
-			echo -e "\#\!/bin/bash\ninfocolor=\"\\e[107m\\e[30m\"\nresetcolor=\"\\e[0m\"\ndialog --title \"Entferne Benutzer\" --msgbox \"Der zuvor vorhandene Benutzer wird entfernt. Dazu sind Rootberechtigungen nötig.\" 20 45\necho -e \"\${infocolor}[Info]\${resetcolor} User entfernen\"\nsudo deluser $delusername --remove-home\necho -e \"\${infocolor}[Info]\${resetcolor} Gruppe entfernen\"\nsudo delgroup $delusername\n\necho -e \"\${infocolor}[Info]\${resetcolor} Script wird von Autostart entfernt.\"\nhead -n -1 /home/$user_name/.bashrc >> /home/$user_name/bashrc.tmp\nrm /home/$user_name/.bashrc\nmv /home/$user_name/bashrc.tmp /home/$user_name/.bashrc" > /scripts/rmusr.sh
+			echo -e "\#\!/bin/bash\ninfocolor=\"\\e[107m\\e[30m\"\nresetcolor=\"\\e[0m\"\ndialog --title \"Entferne Benutzer\" --msgbox \"Der zuvor vorhandene Benutzer wird entfernt. Dazu sind Rootberechtigungen nötig.\" 20 45\necho -e \"\${infocolor}[Info]\${resetcolor} User entfernen\"\nsudo deluser $delusername --remove-home\necho -e \"\${infocolor}[Info]\${resetcolor} Gruppe entfernen\"\nsudo delgroup $delusername\n\necho -e \"\${infocolor}[Info]\${resetcolor} Script wird von Autostart entfernt.\"\nsudo head -n -1 /home/$user_name/.bashrc >> /home/$user_name/bashrc.tmp\nsudo rm /home/$user_name/.bashrc\nsudo mv /home/$user_name/bashrc.tmp /home/$user_name/.bashrc" > /scripts/rmusr.sh
 			chmod +x /scripts/rmusr.sh
 			echo /scripts/rmusr.sh >> /home/$user_name/.bashrc
 		elif [ $wahl -eq 6 ]; then
