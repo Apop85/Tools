@@ -6,11 +6,11 @@
 #  Project: Modul 122
 # -----
 #  Created Date: Thursday 09.01.2020, 20:59
-#  Author: Raffael Baldinger
+#  Author: Apop85
 # -----
 #  Last Modified: Friday 10.01.2020, 00:15
 # -----
-#  Copyright (c) 2020 Raffael Baldinger
+#  Copyright (c) 2020 Apop85
 #  This software is published under the MIT license.
 #  Check http://www.opensource.org/licenses/MIT for further informations
 # -----

@@ -9,7 +9,7 @@ REM  Author: Apop85
 REM -----
 REM  Last Modified: Thursday 05.03.2020, 21:31
 REM -----
-REM  Copyright (c) 2020 Raffael Baldinger
+REM  Copyright (c) 2020 Apop85
 REM  This software is published under the MIT license.
 REM  Check http://www.opensource.org/licenses/MIT for further informations
 REM -----
