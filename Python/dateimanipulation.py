@@ -207,22 +207,32 @@ def move_and_rename(root_path):
         new_item = " ".join(item.split("."))
         os.chdir(root_path+"\\"+item)
         for filename in os.listdir():
-            result = regex.findall(filename)[0]
-            new_filename = new_item+result
-            os.rename(filename, new_filename)
-            shutil.move(new_filename, root_path)
+            if os.path.isfile(filename):
+                try:
+                    result = regex.findall(filename)[0]
+                    new_filename = new_item+result
+                    os.rename(filename, new_filename)
+                    shutil.move(new_filename, root_path)
+                    print("File moved: {}".format(filename))
+                except:
+                    pass
 
 def remove_words():
     # Bestimmte Zeichenfolgen aus Dateinamen entfernen
     regex = get_regex(r"Zu entfernende Zeichenfolgen angeben und mit 'Oder-Funktion' voneinander trennen (Bsp: Subbed|Dubbed). ")
     folder_list = os.listdir()
     for item in folder_list:
-        new_item = " ".join(item.split("."))
+        file_extension = item.split(".")[-1]
+        new_item = item[:-len(file_extension)-1]
         new_item = re.sub(regex, "", new_item)
-        new_item = "".join(new_item.split("  "))
-        new_item = "".join(new_item.split("V"))
-        new_item = new_item.rstrip(" ")
+        new_item = new_item + "." + file_extension
+        if new_item != item:
+            shutil.move(item, new_item)
+            print("Renamed file: {} --> {}".format(item, new_item))
+        
+        
+        
 
-
-menu()
+while True:
+    menu()
 exit()
