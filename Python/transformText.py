@@ -56,7 +56,7 @@ def printMenu(choices):
         else:
             # Gebe Fehlermeldung aus
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("Auswahl ungültig. Gültige Auswahl: 1 bis {}".format(len(choice)))
+            print("Auswahl ungültig. Gültige Auswahl: 1 bis {}".format(len(choices)))
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 
