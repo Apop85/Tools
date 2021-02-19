@@ -1,0 +1,14 @@
+backupDir:.
+│   backup.log
+│
+├───Tag 01
+│       0.1.001=backup_data.exe
+│       0.1.001=backup_data.py
+│       0.1.001=py_2_exe.bat
+│       0.1.002=backup_data.py
+│       0.1.003=backup_data.py
+│
+└───Tag 02
+        0.2.001=backup_data.py
+        0.2.002=backup_data.py
+        0.2.003=backup_data.py
