@@ -9,7 +9,7 @@
 # Created Date: Friday 19.02.2021, 13:13
 # Author: Apop85
 #-----
-# Last Modified: Friday 19.02.2021, 17:53
+# Last Modified: Friday 20.02.2021, 12:52
 #-----
 # Copyright (c) 2021 Apop85
 # This software is published under the MIT license.
@@ -49,7 +49,7 @@ import subprocess
 from datetime import datetime
 
 # Change working directory to script directory
-script_path = os.path.dirname(__file__)
+# script_path = os.path.dirname(__file__)
 
 # Define core variables
 source_dir = argv[1]
@@ -175,19 +175,27 @@ def getLatestSerialPath(backup_dir, serial_folder_prefix):
         createFolder(serial_folder)
 
     print(serial_folder_prefix + "{:02d}".format(current_serial))
-    return serial_folder
+    return serial_folder, current_serial
 
-def getLatestFileVersion(file_basename, backup_dir, serial_path):
+def getLatestFileVersion(file_basename, backup_dir, serial_path, main_version):
     print(f"Getting latest file version for {file_basename}...", end="")
+    if "\\" in serial_path:
+        os_delimiter = "\\"
+    elif "/" in serial_path:
+        os_delimiter = "/"
     # Calculate main_version by the amount of serialized folders
-    main_version = 1
-    for path, folders, files in os.walk(backup_dir):
-        if path != serial_path:
-            for filename in files:
-                if file_basename in filename:
-                    main_version += 1
-                    break
+
+    # main_version = 1
+    # for path, folders, files in os.walk(backup_dir):
+    #     # if path != serial_path:
+    #     for filename in files:
+    #         if file_basename in filename:
+    #             main_version += 1
+    #             break
     
+    # if new_day:
+    #     main_version += 1
+
     main_version /= 10
     # main_version = len(os.listdir(backup_dir)) / 10
 
@@ -266,7 +274,7 @@ file_informations, need_to_backup = getSourceFileInformations(file_list, script_
 changes = False
 if need_to_backup:
     # Get current serial path
-    serial_path = getLatestSerialPath(backup_dir, serial_folder_prefix)
+    serial_path, current_serial = getLatestSerialPath(backup_dir, serial_folder_prefix)
 
     for filename in file_informations["source"].keys():
         # Extract basename from file path
@@ -276,7 +284,7 @@ if need_to_backup:
             # Check if file was backed up before
             if not filename in file_informations["backups"].keys():
                 # Get current file_version
-                current_file_version = getLatestFileVersion(file_basename, backup_dir, serial_path)
+                current_file_version = getLatestFileVersion(file_basename, backup_dir, serial_path, current_serial)
                 
                 log_message = f"Backing up {file_basename}".ljust(45)
                 # Define target path
@@ -305,7 +313,7 @@ if need_to_backup:
                 if previous_hash != file_hash:
                     log_message = f"Backing up {file_basename}".ljust(45)
                     # Get current file version
-                    current_file_version = getLatestFileVersion(file_basename, backup_dir, serial_path)
+                    current_file_version = getLatestFileVersion(file_basename, backup_dir, serial_path, current_serial)
                     # Define target path 
                     target_path = os.path.join(serial_path, current_file_version + version_delimiter + file_basename)
                     # Copy file to backup path
