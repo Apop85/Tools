@@ -32,6 +32,7 @@ def menu():
                   3 : "Dateien mit Präfix versehen", 
                   4 : "Dateien aus Ordner in Elternordner verschieben und nach Ordner benennen", 
                   5 : "Wörter und Buchstabenfolgen aus Dateinamen entfernen",
+                  6 : "Wörter und Buchstabenfolgen in Dateinamen ersetzen",
                   0 : "Exit"}
 
     choosed = print_menu(menu_items)
@@ -49,6 +50,8 @@ def menu():
         move_and_rename(root_path)
     elif choosed == 5:
         remove_words()
+    elif choosed == 6:
+        replace_words()
     elif choosed == 0:
         print("Programm wird beendet")
         sleep(5)
@@ -110,8 +113,8 @@ def get_regex(message):
                             r"[abc] = a,b und c müssen vorkommen", r"[^abc] = dürfen nicht vorkommen",
                             r"[a-g] = a-g können vorkommen", r"[a-zA-Z] = Alle Buchstaben von a-Z", 
                             r"^abc = Beginnt mit 'abc'", r"abc$ = Endet mit 'abc'", 
-                            r"\\ = Maskieren eines Spezialcharakters", r"abc|bcd = abc oder bcd", 
-                            r"\. = Jedes Zeichen ausser 'newline'", r"\t = Tabulator", 
+                            r"\ = Maskieren eines Spezialcharakters", r"abc|bcd = abc oder bcd", 
+                            r". = Jedes Zeichen ausser 'newline'", r"\t = Tabulator", 
                             r"\n = 'newline'", r"\r = Return", 
                             r"(abc) = als Gruppe erfassen", r"\1 = Gruppe 1", 
                             r"\d{1,5} = Zahlen zwischen ein- und fünfstellig", r"\d{2} = Zahlen, genau zweistellig", 
@@ -222,16 +225,30 @@ def remove_words():
     regex = get_regex(r"Zu entfernende Zeichenfolgen angeben und mit 'Oder-Funktion' voneinander trennen (Bsp: Subbed|Dubbed). ")
     folder_list = os.listdir()
     for item in folder_list:
-        file_extension = item.split(".")[-1]
-        new_item = item[:-len(file_extension)-1]
-        new_item = re.sub(regex, "", new_item)
-        new_item = new_item + "." + file_extension
-        if new_item != item:
-            shutil.move(item, new_item)
-            print("Renamed file: {} --> {}".format(item, new_item))
+        if os.path.isfile(item):
+            file_extension = item.split(".")[-1]
+            new_item = item[:-len(file_extension)-1]
+            new_item = re.sub(regex, "", new_item)
+            new_item = new_item + "." + file_extension
+            if new_item != item:
+                shutil.move(item, new_item)
+                print("Renamed file: {} --> {}".format(item, new_item))
         
         
-        
+def replace_words():
+    # Bestimmte Zeichenfolgen aus Dateinamen entfernen
+    regex = get_regex(r"Zu ersetzende Zeichenfolgen angeben und mit 'Oder-Funktion' voneinander trennen (Bsp: Subbed|Dubbed). ")
+    replace_with = input("Mit folgender Zeichenfolge ersetzen: ")
+    folder_list = os.listdir()
+    for item in folder_list:
+        if os.path.isfile(item):
+            file_extension = item.split(".")[-1]
+            new_item = item[:-len(file_extension)-1]
+            new_item = re.sub(regex, replace_with, new_item)
+            new_item = new_item + "." + file_extension
+            if new_item != item:
+                shutil.move(item, new_item)
+                print("Renamed file: {} --> {}".format(item, new_item))
 
 while True:
     menu()
