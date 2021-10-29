@@ -8,7 +8,7 @@
 # Created Date: Tuesday 26.10.2021, 21:25
 # Author: Apop85
 #-----
-# Last Modified: Friday 29.10.2021, 00:13
+# Last Modified: Friday 29.10.2021, 11:53
 #-----
 # Copyright (c) 2021 Apop85
 # This software is published under the MIT license.
@@ -20,7 +20,7 @@ import win32com.client
 import os, re, datetime
 
 # Source directory containing the files to be changed
-sourceDir=r"\\192.168.1.14\Bilder\Pilze"
+sourceDir=r"\\192.168.1.14\Bilder\Buddy"
 # Localizations of capture date
 captureDateNames = ["Aufnahmedatum"]
 # Set the possible filename patterns
