@@ -208,6 +208,8 @@ def move_and_rename(root_path):
     for item in folder_list:
         os.chdir(root_path)
         new_item = " ".join(item.split("."))
+        if not os.path.isdir(root_path + "\\" + item):
+            continue
         os.chdir(root_path+"\\"+item)
         for filename in os.listdir():
             if os.path.isfile(filename):
