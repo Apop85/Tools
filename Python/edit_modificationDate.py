@@ -17,10 +17,11 @@
 # Description: Script to change modification date of files in a directory depending on capture date or filename
 ####
 import win32com.client
+from win32_setctime import setctime
 import os, re, datetime
 
 # Source directory containing the files to be changed
-sourceDir=r"\\192.168.1.14\Bilder\Buddy"
+sourceDir=r"G:\Bilder\Natur"
 # Localizations of capture date
 captureDateNames = ["Aufnahmedatum"]
 # Set the possible filename patterns
@@ -124,10 +125,11 @@ for item in ns.Items():
                 # Calculate new unix time timestamp
                 newTimestamp = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second)).timestamp()
                 # Check if change is needed
-                if modifiedTimestamp != newTimestamp:
+                if modifiedTimestamp != newTimestamp or newTimestamp != createdTimestamp:
                     print("\r" * 100 + f"Modifiziere Änderungsdatum: Datei {counter} von {menge} - {round(100/menge*counter, 2)}% - " + f"{day}/{month}/{year} {hour}:{minute}:{second}        ", end="")
                     # Change file properties
-                    os.utime(item.Path,(0, newTimestamp))
+                    os.utime(item.Path,(newTimestamp, newTimestamp))
+                    setctime(item.Path, newTimestamp)
                 else:
                     print("\r" * 100 + f"Überspringe Änderungsdatum: Datei {counter} von {menge} - {round(100/menge*counter, 2)}%   " + " " * len(f"{day}/{month}/{year} {hour}:{minute}:{second}       "), end="")
 
