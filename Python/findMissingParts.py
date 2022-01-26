@@ -5,10 +5,10 @@ import re
 def findMissing():
     path = r""
     season =  "xyz"
-    pattern = re.compile(r".*[Ss]\d\d[Ee]\d\d.*")
-    seasonPattern = re.compile(r".*[Ss](\d\d)[Ee]\d\d.*")
-    episodePattern = re.compile(r".*[Ss]\d\d[Ee](\d\d).*")
-    prefixPattern = re.compile(r"(.*)[Ss]\d\d[Ee]\d\d.*")
+    pattern = re.compile(r".*[Ss]\d\d[FfEe]\d\d.*")
+    seasonPattern = re.compile(r".*[Ss](\d\d)[FfEe]\d\d.*")
+    episodePattern = re.compile(r".*[Ss]\d\d[FfEe](\d\d).*")
+    prefixPattern = re.compile(r"(.*)[Ss]\d\d[FfEe]\d\d.*")
 
     while not os.path.exists(path):
         path = input("Pfad angeben: ")
