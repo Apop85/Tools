@@ -212,15 +212,21 @@ def move_and_rename(root_path):
             continue
         os.chdir(root_path+"\\"+item)
         for filename in os.listdir():
+            os.chdir(root_path+"\\"+item)
             if os.path.isfile(filename):
                 try:
                     result = regex.findall(filename)[0]
                     new_filename = new_item+result
                     os.rename(filename, new_filename)
                     shutil.move(new_filename, root_path)
+                    if os.path.exists(os.path.join(root_path, new_filename)):
+                        os.chdir(root_path)
+                        os.rmdir(os.path.join(root_path, item))
                     print("File moved: {}".format(filename))
                 except:
                     pass
+    os.chdir(root_path)
+    
 
 def remove_words():
     # Bestimmte Zeichenfolgen aus Dateinamen entfernen
